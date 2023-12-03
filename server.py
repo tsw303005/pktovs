@@ -26,13 +26,13 @@ def getNumSoftirqs(irqNum):
     return irqNum
 
 def cpuUsage():
-    command = "sar -u 1"
+    command = "sar -u 1 > cpu_utilization.out"
     
-    proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen(command, shell=True)
 
-    output, err = proc.communicate()
+    proc.wait()
 
-    print(output.decode('utf-8'))
+    
 
 
 def startIperfServer(n):
@@ -50,5 +50,7 @@ startIperfServer(n)
 while (True):
     cpuUsage()
     irqNum = getNumSoftirqs(irqNum)
-    print(f"interrupts: {count}")
+    print(f"Number of interrupts: {count}")
+    with open("interrupts.out", "w") as f:
+        f.write(f"Number of interrupts: {count}")
     sleep(1)
