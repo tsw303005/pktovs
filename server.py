@@ -30,10 +30,6 @@ def cpuUsage():
     
     proc = subprocess.Popen(command, shell=True)
 
-    proc.wait()
-
-    
-
 
 def startIperfServer(n):
     commands = [f"iperf3 -s -p {5100 + i} > /dev/null 2>&1 &" for i in range(n)]
@@ -47,10 +43,9 @@ n = 7 # n is numer of iperf server
 irqNum = list()
 count = 0
 startIperfServer(n)
+cpuUsage()
 while (True):
-    cpuUsage()
     irqNum = getNumSoftirqs(irqNum)
-    print(f"Number of interrupts: {count}")
     with open("interrupts.out", "w") as f:
         f.write(f"Number of interrupts: {count}")
     sleep(1)
