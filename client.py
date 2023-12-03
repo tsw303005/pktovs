@@ -17,6 +17,7 @@ for process in processes:
 
 total_transfer_data = 0
 bandwidth = 0
+
 for i in range(n):
     with open(f"{5100 + i}.json", "r") as f:
         data = json.load(f)

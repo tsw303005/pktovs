@@ -48,6 +48,7 @@ irqNum = list()
 count = 0
 startIperfServer(n)
 while (True):
+    cpuUsage()
     irqNum = getNumSoftirqs(irqNum)
-    print(count)
+    print(f"interrupts: {count}")
     sleep(1)
