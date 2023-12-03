@@ -1,6 +1,8 @@
 import subprocess
 import re
+import os
 from time import sleep
+from dotenv import load_dotenv
 
 def getNumSoftirqs(irqNum): 
     command = "cat /proc/softirqs | grep -i  NET_RX:"
@@ -39,7 +41,8 @@ def startIperfServer(n):
         process.wait()
 
 
-n = 7 # n is numer of iperf server
+load_dotenv()
+n = int(os.getenv('N')) # n is numer of iperf server
 irqNum = list()
 count = 0
 startIperfServer(n)
