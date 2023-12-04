@@ -34,19 +34,32 @@ def cpuUsage():
 
 
 def startIperfServer(n):
-    commands = [f"iperf3 -s -p {5100 + i} > /dev/null 2>&1 &" for i in range(n)]
+    commands = [f"{iperf} -s -p {server_port} > /dev/null 2>&1 &" for i in range(n)]
     processes = [subprocess.Popen(cmd, shell=True) for cmd in commands]
 
     for process in processes:
         process.wait()
 
+def iperfVersion():
+    command = f"{iperf} -v"
+    proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    output, err = proc.communicate()
+    print(f"--------- iperf version --------- \n\n{output.decode('utf-8')}\n")
+
 
 load_dotenv()
 n = int(os.getenv('N')) # n is numer of iperf server
+iperf = os.getenv('IPERF_PATH')
+server_port = int(os.getenv('SERVER_PORT'))
 irqNum = list()
-count = 0
-startIperfServer(n)
-cpuUsage()
+count = 0 # used to collect softirq number
+
+iperfVersion() # get iperf version
+print("[Info] start iperf server...")
+startIperfServer(n) # run iperf server
+cpuUsage() # show cpu usage
+
 while (True):
     irqNum = getNumSoftirqs(irqNum)
     with open("interrupts.out", "w") as f:
